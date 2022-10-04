@@ -90,4 +90,19 @@ class UserController extends Controller
             "blocks" => $blocks
         ]);
     }
+
+    function changeStatus()
+    {
+        $user = User::find(Auth::user()->id);
+        if ($user->status == 0) {
+            $user->status = 1;
+        } else {
+            $user->status = 0;
+        }
+        $user->save();
+        return response()->json([
+            "status" => "Success",
+            "user" => $user
+        ]);
+    }
 }
