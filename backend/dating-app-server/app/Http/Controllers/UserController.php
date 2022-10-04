@@ -59,4 +59,35 @@ class UserController extends Controller
             "favorites" => $favorites
         ]);
     }
+
+    function addToBlocks(Request $request)
+    {
+        DB::table('blocks')->insert([
+            'blocker_id' => Auth::user()->id,
+            'blocked_id' => $request->blocked_id,
+        ]);
+        return response()->json([
+            "status" => "Success",
+        ]);
+    }
+
+    function removeFromBlocks(Request $request)
+    {
+        DB::table('blocks')->where([
+            'blocker_id' => Auth::user()->id,
+            'blocked_id' => $request->blocked_id,
+        ])->delete();
+        return response()->json([
+            "status" => "Success",
+        ]);
+    }
+
+    function getBlocks()
+    {
+        $blocks = DB::table('blocks')->where('blocker_id', Auth::user()->id)->get();
+        return response()->json([
+            "status" => "Success",
+            "blocks" => $blocks
+        ]);
+    }
 }
