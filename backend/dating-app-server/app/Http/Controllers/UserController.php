@@ -134,4 +134,30 @@ class UserController extends Controller
             "status" => "Success",
         ]);
     }
+
+    function getMatches()
+    {
+        $user = User::find(Auth::user()->id);
+        $matches = DB::table('users')
+            ->where('id', '!=', Auth::user()->id)
+            ->where('status', 1)
+            ->where('gender', Auth::user()->interests)
+            ->get();
+        return response()->json([
+            "status" => "Success",
+            "matches" => $matches
+        ]);
+    }
+
+    function getAllUsers()
+    {
+        $users = DB::table('users')
+            ->where('id', '!=', Auth::user()->id)
+            ->where('status', 1)
+            ->get();
+        return response()->json([
+            "status" => "Success",
+            "users" => $users
+        ]);
+    }
 }

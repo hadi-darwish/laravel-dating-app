@@ -22,6 +22,8 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/change_status', [UserController::class, 'changeStatus']);
     Route::post('/get_messages', [UserController::class, 'getMessages']);
     Route::post('/send_message', [UserController::class, 'sendMessage']);
+    Route::post('/getMatches', [UserController::class, 'getMatches']);
+    Route::post('/get_all_users', [UserController::class, 'getAllUsers']);
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
