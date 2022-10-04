@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -28,14 +29,25 @@ class UserController extends Controller
     }
 
 
-    // public function show(Request $request)
-    // {
-    //     $users = User::find(Auth::user()->interest);
-    //     return response()->json([
-    //         "status" => "success",
-    //         "user" => $user
-    //     ], 200);
-    // }
+    function addToFavorites(Request $request)
+    {
+        DB::table('favorites')->insert([
+            'user_id' => Auth::user()->id,
+            'favorite_id' => $request->favorite_id,
+        ]);
+        return response()->json([
+            "status" => "Success",
+        ]);
+    }
 
-
+    function removeFromFavorites(Request $request)
+    {
+        DB::table('favorites')->where([
+            'user_id' => Auth::user()->id,
+            'favorite_id' => $request->favorite_id,
+        ])->delete();
+        return response()->json([
+            "status" => "Success",
+        ]);
+    }
 }
