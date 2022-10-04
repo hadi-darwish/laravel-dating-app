@@ -20,6 +20,8 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/remove_from_blocks', [UserController::class, 'removeFromBlocks']);
     Route::post('/get_blocks', [UserController::class, 'getBlocks']);
     Route::post('/change_status', [UserController::class, 'changeStatus']);
+    Route::post('/get_messages', [UserController::class, 'getMessages']);
+    Route::post('/send_message', [UserController::class, 'sendMessage']);
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

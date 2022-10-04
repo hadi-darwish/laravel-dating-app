@@ -105,4 +105,33 @@ class UserController extends Controller
             "user" => $user
         ]);
     }
+
+    function getMessages(Request $request)
+    {
+        $messages = DB::table('messages')
+            ->where([
+                'sender_id' => Auth::user()->id,
+                'recipient_id' => $request->recipient_id,
+            ])->orWhere([
+                'sender_id' => $request->recipient_id,
+                'recipient_id' => Auth::user()->id,
+            ])->orderBy('id')
+            ->get();
+        return response()->json([
+            "status" => "Success",
+            "messages" => $messages
+        ]);
+    }
+
+    function sendMessage(Request $request)
+    {
+        DB::table('messages')->insert([
+            'sender_id' => Auth::user()->id,
+            'recipient_id' => $request->recipient_id,
+            'message' => $request->message,
+        ]);
+        return response()->json([
+            "status" => "Success",
+        ]);
+    }
 }
