@@ -50,4 +50,13 @@ class UserController extends Controller
             "status" => "Success",
         ]);
     }
+
+    function getFavorites()
+    {
+        $favorites = DB::table('favorites')->where('user_id', Auth::user()->id)->get();
+        return response()->json([
+            "status" => "Success",
+            "favorites" => $favorites
+        ]);
+    }
 }
