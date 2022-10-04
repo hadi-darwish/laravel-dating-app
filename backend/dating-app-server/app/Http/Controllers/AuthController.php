@@ -50,11 +50,27 @@ class AuthController extends Controller
             'password' => 'required|string|min:6',
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+
+        $user = new User;
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->age = $request->age;
+        $user->gender = $request->gender;
+        $user->interests = $request->interests;
+        $user->location = $request->location;
+        $user->status = 0;
+        $user->bio = "I'm new here!";
+        $user->profile_pic = "https://i.imgur.com/8Q9QY7C.png";
+        $user->save();
+
+
+
+
+
+
+
+
 
         $token = Auth::login($user);
         return response()->json([
