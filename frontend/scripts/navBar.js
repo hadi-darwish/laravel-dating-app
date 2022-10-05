@@ -49,20 +49,33 @@ navHomeBtn.addEventListener("click", () => {
               <p class="price">${match.location}</p>
             </div>
             <div class="product-card-icons">
-              <div class="product-card-icon">
-                <img alt="" class = "block"   src="./images/remove.svg" />
-              </div>
-              <div class="product-card-icon">
-                <img alt="" class = "like" src="./images/like.svg" />
-              </div>
+            <div class="product-card-icon">
+            <img alt="" class = "block"   src="./images/remove.svg" />
+          </div>
+          <div class="product-card-icon">
+            <img alt="" class = "like"  data-value="${match.id}" src="./images/like.svg" />
+          </div>
             </div>
           </div>
         </div>
       </div>`;
       });
     }
+    const like = document.querySelectorAll(".like");
+    const block = document.querySelectorAll(".block");
+    like.forEach((element) => {
+      element.addEventListener("click", () => {
+        let favorite = "http://127.0.0.1:8000/api/toggle_favorites";
+        console.log(element.getAttribute("data-value"));
+        let param = new URLSearchParams();
+        param.append("token", localStorage.getItem("token"));
+        param.append("favorite_id", element.getAttribute("data-value"));
+        axios.post(favorite, param).then((res) => {
+          console.log(res.data);
+        });
+      });
+    });
   });
-
   navHomeBtn.children[0].style.color = "#e20a58";
   navFavBtn.children[0].style.color = "red";
   navMessageBtn.children[0].style.color = "red";

@@ -28,6 +28,36 @@ class UserController extends Controller
         ], 200);
     }
 
+    function changeFavorite(Request $request)
+    {
+
+        $favorites = DB::table('favorites')
+            ->where('user_id', Auth::user()->id)
+            ->where('favorite_id', $request->favorite_id)
+            ->get();
+        if ($favorites->count() > 0) {
+            DB::table('favorites')
+                ->where('user_id', Auth::user()->id)
+                ->where('favorite_id', $request->favorite_id)
+                ->delete();
+            return response()->json([
+                "status" => "success",
+                "message" => "Removed from favorites"
+            ], 200);
+        } else {
+            DB::table('favorites')
+                ->insert([
+                    "user_id" => Auth::user()->id,
+                    "favorite_id" => $request->favorite_id
+                ]);
+            return response()->json([
+                "status" => "success",
+                "message" => "Added to favorites"
+            ], 200);
+        }
+    }
+
+
 
     function addToFavorites(Request $request)
     {
