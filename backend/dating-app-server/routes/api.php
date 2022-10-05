@@ -18,6 +18,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/remove_from_favorites', [UserController::class, 'removeFromFavorites']);
     Route::post('/get_favorites', [UserController::class, 'getFavorites']);
     Route::post('/add_to_blocks', [UserController::class, 'addToBlocks']);
+    Route::post('/toggle_blocks', [UserController::class, 'changeBlock']);
     Route::post('/remove_from_blocks', [UserController::class, 'removeFromBlocks']);
     Route::post('/get_blocks', [UserController::class, 'getBlocks']);
     Route::post('/change_status', [UserController::class, 'changeStatus']);
