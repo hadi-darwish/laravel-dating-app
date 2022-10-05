@@ -59,7 +59,7 @@ class AuthController extends Controller
         $user->gender = $request->gender;
         $user->interests = $request->interests;
         $user->location = $request->location;
-        $user->status = 0;
+        $user->status = 1;
         $user->bio = "I'm new here!";
         $user->profile_pic = "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=2000";
         $user->save();

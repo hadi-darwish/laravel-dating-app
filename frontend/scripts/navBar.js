@@ -62,6 +62,7 @@ axios.post(matches, params).then((res) => {
   }
   const like = document.querySelectorAll(".like");
   const block = document.querySelectorAll(".block");
+  const clicked = document.querySelectorAll(".clicked");
   like.forEach((element) => {
     element.addEventListener("click", () => {
       let favorite = "http://127.0.0.1:8000/api/toggle_favorites";
@@ -86,6 +87,44 @@ axios.post(matches, params).then((res) => {
       axios.post(block, param).then((res) => {
         console.log(res.data);
         window.location.reload();
+      });
+    });
+  });
+  clicked.forEach((element) => {
+    element.addEventListener("click", () => {
+      let messages = "http://127.0.0.1:8000/api/get_messages";
+      console.log(element.getAttribute("id"));
+      let param = new URLSearchParams();
+      param.append("token", localStorage.getItem("token"));
+      param.append("recipient_id", element.getAttribute("id"));
+      axios.post(messages, param).then((res) => {
+        console.log(res.data);
+        appBody.innerHTML = "";
+        appBody.innerHTML += `<div class="message-container">
+        <h1>Messages</h1>
+        <h2>Send a message to ${res.data.user.name}</h2>
+          <div class="message-list">
+          <div class="message">
+            <div class="message-sender">
+            <p>${res.data.messages.forEach((element) => {
+              return res.data.user.name + " " + element.message + "<br>";
+            })}</p>
+            <div class="message-input">
+            <input type="text" id="msg" placeholder="Type your message here" />
+            <button id="send">Send</button>
+            </div>
+        </div>
+          `;
+        document.getElementById("send").addEventListener("click", () => {
+          let message = "http://127.0.0.1:8000/api/send_message";
+          let param = new URLSearchParams();
+          param.append("token", localStorage.getItem("token"));
+          param.append("recipient_id", element.getAttribute("id"));
+          param.append("message", document.getElementById("msg").value);
+          axios.post(message, param).then((res) => {
+            console.log(res.data);
+          });
+        });
       });
     });
   });

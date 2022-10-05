@@ -205,6 +205,7 @@ class UserController extends Controller
 
     function getMessages(Request $request)
     {
+        $usere = User::find($request->recipient_id);
         $messages = DB::table('messages')
             ->where([
                 'sender_id' => Auth::user()->id,
@@ -216,7 +217,8 @@ class UserController extends Controller
             ->get();
         return response()->json([
             "status" => "Success",
-            "messages" => $messages
+            "messages" => $messages,
+            "user" => $usere
         ]);
     }
 
@@ -261,6 +263,14 @@ class UserController extends Controller
         return response()->json([
             "status" => "Success",
             "users" => $users
+        ]);
+    }
+    function getProfile(Request $request)
+    {
+        $user = User::find($request->id);
+        return response()->json([
+            "status" => "Success",
+            "user" => $user
         ]);
     }
 }
