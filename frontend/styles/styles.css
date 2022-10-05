@@ -3,10 +3,10 @@
   padding: 0;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  text-decoration: unset;
+  /* text-decoration: unset; */
   outline: none;
   -webkit-tap-highlight-color: transparent;
-  font-family: sans-serif;
+  /* font-family: sans-serif; */
   -ms-scroll-chaining: none;
   overscroll-behavior: contain;
   -ms-overflow-style: none;
@@ -239,6 +239,7 @@ input {
   max-width: 40rem;
   border-radius: 18px;
   justify-content: center;
+  margin: 2rem 0;
 }
 .vertical {
   max-width: 18rem;
@@ -313,6 +314,11 @@ input {
 .product-card-icons {
   display: flex;
   gap: 3rem;
+}
+.product-card-icon {
+  width: 2rem;
+  height: 2rem;
+  cursor: pointer;
 }
 
 .product-card-actions {

@@ -28,6 +28,36 @@ class UserController extends Controller
         ], 200);
     }
 
+    function changeFavorite(Request $request)
+    {
+
+        $favorites = DB::table('favorites')
+            ->where('user_id', Auth::user()->id)
+            ->where('favorite_id', $request->favorite_id)
+            ->get();
+        if ($favorites->count() > 0) {
+            DB::table('favorites')
+                ->where('user_id', Auth::user()->id)
+                ->where('favorite_id', $request->favorite_id)
+                ->delete();
+            return response()->json([
+                "status" => "success",
+                "message" => "Removed from favorites"
+            ], 200);
+        } else {
+            DB::table('favorites')
+                ->insert([
+                    "user_id" => Auth::user()->id,
+                    "favorite_id" => $request->favorite_id
+                ]);
+            return response()->json([
+                "status" => "success",
+                "message" => "Added to favorites"
+            ], 200);
+        }
+    }
+
+
 
     function addToFavorites(Request $request)
     {
@@ -51,6 +81,8 @@ class UserController extends Controller
         ]);
     }
 
+
+
     function getFavorites()
     {
         $favorites = DB::table('favorites')->where('user_id', Auth::user()->id)->get();
@@ -73,6 +105,36 @@ class UserController extends Controller
             "favorites" => $favorites,
             "user" => getUser()
         ]);
+    }
+
+
+    function changeBlock(Request $request)
+    {
+
+        $blocks = DB::table('blocks')
+            ->where('blocker_id', Auth::user()->id)
+            ->where('blocked_id', $request->blocked_id)
+            ->get();
+        if ($blocks->count() > 0) {
+            DB::table('blocks')
+                ->where('blocker_id', Auth::user()->id)
+                ->where('blocked_id', $request->blocked_id)
+                ->delete();
+            return response()->json([
+                "status" => "success",
+                "message" => "Unblocked"
+            ], 200);
+        } else {
+            DB::table('blocks')
+                ->insert([
+                    "blocker_id" => Auth::user()->id,
+                    "blocked_id" => $request->blocked_id
+                ]);
+            return response()->json([
+                "status" => "success",
+                "message" => "Blocked"
+            ], 200);
+        }
     }
 
     function addToBlocks(Request $request)
@@ -143,6 +205,7 @@ class UserController extends Controller
 
     function getMessages(Request $request)
     {
+        $usere = User::find($request->recipient_id);
         $messages = DB::table('messages')
             ->where([
                 'sender_id' => Auth::user()->id,
@@ -154,7 +217,8 @@ class UserController extends Controller
             ->get();
         return response()->json([
             "status" => "Success",
-            "messages" => $messages
+            "messages" => $messages,
+            "user" => $usere
         ]);
     }
 
@@ -172,9 +236,15 @@ class UserController extends Controller
 
     function getMatches()
     {
+        $blocked = DB::table('blocks')->where('blocker_id', Auth::user()->id)->get();
+        $blockedIds = [];
+        foreach ($blocked as $block) {
+            $blockedIds[] = $block->blocked_id;
+        }
         $user = User::find(Auth::user()->id);
         $matches = DB::table('users')
             ->where('id', '!=', Auth::user()->id)
+            ->whereNotIn('id', $blockedIds)
             ->where('status', 1)
             ->where('gender', Auth::user()->interests)
             ->get();
@@ -193,6 +263,14 @@ class UserController extends Controller
         return response()->json([
             "status" => "Success",
             "users" => $users
+        ]);
+    }
+    function getProfile(Request $request)
+    {
+        $user = User::find($request->id);
+        return response()->json([
+            "status" => "Success",
+            "user" => $user
         ]);
     }
 }
