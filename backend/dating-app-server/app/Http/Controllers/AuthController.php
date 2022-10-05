@@ -61,7 +61,7 @@ class AuthController extends Controller
         $user->location = $request->location;
         $user->status = 0;
         $user->bio = "I'm new here!";
-        $user->profile_pic = "https://i.imgur.com/8Q9QY7C.png";
+        $user->profile_pic = "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=2000";
         $user->save();
 
 

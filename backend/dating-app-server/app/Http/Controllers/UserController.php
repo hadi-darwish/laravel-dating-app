@@ -54,9 +54,24 @@ class UserController extends Controller
     function getFavorites()
     {
         $favorites = DB::table('favorites')->where('user_id', Auth::user()->id)->get();
+        $favoriteUsers = [];
+        foreach ($favorites as $favorite) {
+            $favoriteUsers[] = User::find($favorite->favorite_id);
+        }
         return response()->json([
             "status" => "Success",
-            "favorites" => $favorites
+            "favorites" => $favoriteUsers
+        ]);
+    }
+
+
+    function getFavoritesTabel()
+    {
+        $favorites = DB::table('favorites')->where('user_id', Auth::user()->id)->get();
+        return response()->json([
+            "status" => "Success",
+            "favorites" => $favorites,
+            "user" => getUser()
         ]);
     }
 
@@ -82,7 +97,27 @@ class UserController extends Controller
         ]);
     }
 
+
+
     function getBlocks()
+    {
+        $blocks = DB::table('blocks')->where('blocker_id', Auth::user()->id)->get();
+        $blockedUsers = [];
+        foreach ($blocks as $block) {
+            $blockedUsers[] = User::find($block->blocked_id);
+        }
+        return response()->json([
+            "status" => "Success",
+            "blocks" => $blockedUsers
+        ]);
+    }
+
+
+
+
+
+
+    function getBlocksTable()
     {
         $blocks = DB::table('blocks')->where('blocker_id', Auth::user()->id)->get();
         return response()->json([
